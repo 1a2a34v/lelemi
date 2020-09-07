@@ -15,21 +15,27 @@ def generate_flashcard(word, values):
         i=0
         for wd in values["wordref"]:
             # re.sub(r'0x\w{2}', '',s)
-            if i<3:
+            if i<6:
                 reverseside+="{}<hr/>".format(wd)
             i+=1
 
     if values.get("wadoku",None):
+        if reverseside == "":
+            reverseside+='<h3 style="background-color:DodgerBlue;">単語翻訳:</h3>\n'
         i=0
         for wd in values["wadoku"]:
             # re.sub(r'0x\w{2}', '',s)
-            if i<3 and not wd["np"] in ura and "xa0" not in wd["de"]:
+            if i<6 and not wd["np"] in reverseside and "xa0" not in wd["de"]:
                 reverseside+="{} --- {}<hr/>".format(wd["de"],wd["np"])
                 i+=1
+
     if values.get("tatoeba",None):
-        # reverseside+='\n\n<h3 style="background-color:Tomato;">例文-翻訳:</h3>\n'
-        reverseside+='\n\n<h3 style="background-color:Tomato;">use in sentences:</h3>\n'
+        if values.get("wadoku",None):
+            reverseside+='\n\n<h3 style="background-color:Tomato;">例文翻訳:</h3>\n'
+        else:
+            reverseside+='\n\n<h3 style="background-color:Tomato;">use in sentences:</h3>\n'
         i=0
+        print(values["tatoeba"])
         for tt in values["tatoeba"]:
             # if i<5:
             # gerstr = tt["de"]
@@ -37,6 +43,8 @@ def generate_flashcard(word, values):
             # regex.sub(r'<u style="background-color:Tomato;">\1</u>', gerstr)
             reverseside+="{}<br><br>{}<hr/>".format(tt["de"],tt["np"])
             i+=1
+    else:
+        return None
 
     return {"front":frontside, "back":reverseside}
     # else:

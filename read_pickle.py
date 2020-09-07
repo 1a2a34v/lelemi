@@ -6,7 +6,7 @@ import sys
 import create_flashcards
 class TestP(unittest.TestCase):
     def test_generate_card(self):
-        name = "b1"
+        name = "koh"
         #previous_wordlist = []
         #words = {}
         with open('saved_wordlists/'+name+'.pickle', 'rb') as f:
@@ -15,9 +15,9 @@ class TestP(unittest.TestCase):
         #     if filename.endswith(".pickle"):
         #         with open('genbun_kotoba/'+filename, 'rb') as f:
         #             words = {**words, **pickle.load(f)}
-        print(words.keys())
 
-        anki = create_flashcards.DeckGenerator("b1sorted",words)
+
+        anki = create_flashcards.DeckGenerator("kohs",words)
         #anki.load_pickle()
         anki.generate_deck()
         # for i in words:

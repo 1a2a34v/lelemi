@@ -25,7 +25,6 @@ def get_wordref(word,inputoutput):
         table = soup.find("div", attrs={'class': 'content'})
         ok = table.findAll("td", attrs={'class': 'ToWrd'})
         wordref = []
-
         if ok:
             for i in ok:
                 if "<em class=" in str(i):
@@ -42,6 +41,7 @@ def get_wordref(word,inputoutput):
         print(e)
 
 def get_wadoku(word):
+    print("HOHE")
     url="https://www.wadoku.de/search/{}".format(word)
     # vstr=requests.get(url).content
     # k=re.search('<h2><a id="ch_lblVerb" class="targetted-word-transl" style="color:#0970ac;" tooltip="vorhandener Infinitiv">hingeben</a></h2>',vstr)
@@ -59,8 +59,15 @@ def get_wadoku(word):
             np = re.search('xml:lang="ja">(.*?)<',str(npdiv)).groups()[0]
             ddiv = row.find('div', attrs={'class': 'd'})#
             dsec = row.find('section', attrs={'class': 'senses'})
+            pronoun = re.search('" title="(.*?)">',str(dsec)).groups()[0]
+            if pronoun == "männlich":
+                pronoun = "der"
+            elif pronoun == "sächlich":
+                pronoun = "das"
+            else:
+                pronoun = "die"
             #for i in dsec:
-            de = str(dsec.text.strip()).replace('n\xa0n', '').replace('m\xa0m', '').replace('f\xa0f', '')
+            de = "<br>"+pronoun+" ;"+str(dsec.text.strip()).replace('n\xa0n', '').replace('m\xa0m', '').replace('f\xa0f', '')
             de=de.replace('\xa0', '.')
             if len(de)>100:
                 de = de[:100]
@@ -75,6 +82,7 @@ def get_tatoeba(word,inputlang,resultlang):
     try:
         # url="https://tatoeba.org/eng/sentences/search?query={}&from=deu&to=jpn".format(word)
         url="https://tatoeba.org/eng/sentences/search?query={}&from={}&to={}".format(word,inputlang,resultlang)
+        print(url)
         # vstr=requests.get(url).content
         # k=re.search('<h2><a id="ch_lblVerb" class="targetted-word-transl" style="color:#0970ac;" tooltip="vorhandener Infinitiv">hingeben</a></h2>',vstr)
         vstr=requests.get(url).content
