@@ -23,12 +23,12 @@ import os
 # domain = "en"
 # native = "de"
 # name = "game"
-directory = "sourcekoh"
+directory = "mimiddle"
 seq = ""
-domain = "de"
+domain = "en"
 native = "jp"
-name = "koh"
-minimum_frequency = 2
+name = "mimiddle"
+minimum_frequency = 1
 
 for filename in os.listdir(directory):
     if filename.endswith(".srt"):
@@ -40,7 +40,6 @@ for filename in os.listdir(directory):
 
 #seq = "Drogo"
 converted_sequence = import_source.SequenceConverter(seq,name,domain,native,minimum_frequency)
-converted_sequence.generate_wordlist()
 converted_sequence.retrieve_wordinfo()
 # # words = {'Verweigern': {'iter': 1, 'tatoeba': [{'de': 'Ich verweigere mich, dem Plan zuzustimmen.', 'np': 'その計画に同意するこ とを拒否します。'}, {'de': 'Banken versuchen dir einen Regenschirm zu leihen an einem sonnigen Tag, aber verweigern dir das an einem Regentag.', 'np': '銀行と言うのはお天気の日に傘を貸したがるが、雨の日には、人を見捨てようとするところだ。'}], 'wadoku': [{'de': 'ablehnen, absagen, abschlagen, abwehren, verweigern, Veto einlegen.', 'np': '不承知の'}, {'de': 'ablehnen, abweisen, verweigern, sich nichts sagen lassen, immun sein.', 'np': '不承知の'}, {'de': 'ablehnen, absagen, verweigern.', 'np': '不承知の'}, {'de': '‑ma', 'np': '不承知の'}, {'de': '‑ra', 'np': '不承知の'}, {'de': 'umgehen, ausweichen, vermeiden, ablehnen, verweigern.', 'np': '不承知の'}, {'de': '‑ra', 'np': '不承知の'}, {'de': 'ablehnend, abschlägig, missbilligend, zurückweisend, verweigernd, nicht einverstanden.', 'np': '不承知の'}, {'de': 'ablehnend, abschlägig, missbilligend, zurückweisend, verweigernd, nicht einverstanden.', 'np': '不承知の'}]}}
 anki = create_flashcards.DeckGenerator(name,converted_sequence.words)

@@ -9,6 +9,16 @@ def generate_flashcard(word, values):
     #reverseside='<h3 style="background-color:DodgerBlue;">類語-翻訳:</h3>\n'
     reverseside=""
 
+    if values.get("jisho",None):
+        if reverseside == "":
+            reverseside+='<h3 style="background-color:DodgerBlue;">単語翻訳:</h3>\n'
+        i=0
+        for j in values["jisho"]:
+            # re.sub(r'0x\w{2}', '',s)
+            if i<6 and not j["jp"] in reverseside and "xa0" not in j["en"]:
+                reverseside+="{} --- {}<hr/>".format(j["en"],j["jp"])
+                i+=1
+
     if values.get("wordref",None):
         if reverseside == "":
             reverseside+='<h3 style="background-color:DodgerBlue;">sentence-translations:</h3>\n'
@@ -35,7 +45,6 @@ def generate_flashcard(word, values):
         else:
             reverseside+='\n\n<h3 style="background-color:Tomato;">use in sentences:</h3>\n'
         i=0
-        print(values["tatoeba"])
         for tt in values["tatoeba"]:
             # if i<5:
             # gerstr = tt["de"]
@@ -43,8 +52,7 @@ def generate_flashcard(word, values):
             # regex.sub(r'<u style="background-color:Tomato;">\1</u>', gerstr)
             reverseside+="{}<br><br>{}<hr/>".format(tt["de"],tt["np"])
             i+=1
-    else:
-        return None
+
 
     return {"front":frontside, "back":reverseside}
     # else:

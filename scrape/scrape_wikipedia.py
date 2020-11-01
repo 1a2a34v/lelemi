@@ -12,9 +12,9 @@ pile = ""
 current_iteration = 0
 current_url_index = ()
 discarded = []
-max_discarded = 1000
+max_discarded = 5000
 suited_links = []
-desired_suited = 50
+desired_suited = 500
 #so we gather all links connected to the initial link in a list
 #the initial link is scraped until criteria are met or enough links containing relevant keywords are found
 #once the initial link is scraped, all links contained are searched for relevant keywords and a new list of initial links is created
@@ -188,7 +188,8 @@ def a(init_url,req = False):
     #this list is always stored globally under suited links and (for now) updated periodically upon entering a new iteration
     links = []
     sub_links = []
-    while len(suited_links)<desired_suited:
+    while len(suited_links)<desired_suited and links<max_discarded:
+        print(links)
         if len(suited_links)==0:
             response = requests.get(init_url)
             soup = bs(response.content, 'html.parser')

@@ -7,13 +7,46 @@ import sys
 import os
 
 def gather(dictionary,word):
-    print(word)
     if dictionary=="wadoku":
         return get_wadoku(word)
     if "tatoeba" in dictionary:
-        return get_tatoeba(word,dictionary[1],dictionary[2])
+        t = get_tatoeba(word,dictionary[1],dictionary[2])
+        print(t)
+        return t
     if "wordref" in dictionary:
         return get_wordref(word,dictionary[1])
+    if "jisho" in dictionary:
+        return get_jisho(word)
+    if "gpic" in dictionary:
+        return get_gpic(word)
+
+def get_jisho(word):
+    try:
+        # url="https://tatoeba.org/eng/sentences/search?query={}&from=deu&to=jpn".format(word)
+        url="https://jisho.org/search/{}".format(word)
+        # vstr=requests.get(url).content
+        # k=re.search('<h2><a id="ch_lblVerb" class="targetted-word-transl" style="color:#0970ac;" tooltip="vorhandener Infinitiv">hingeben</a></h2>',vstr)
+        vstr=requests.get(url).content
+        soup = BeautifulSoup(vstr,features="html.parser",from_encoding='utf8')
+        rows = soup.findAll('div', {"class":"concept_light clearfix"})
+        jisho=[]
+        for row in rows:
+            r = row.findAll('span', {"class":"text"})
+            r = str(r).replace('<span class="text">',"").replace("<span>","").replace("</span>","").replace(" ","").replace("[","").replace("]","").replace("\n","")
+            o = row.findAll('span', {"class":"meaning-meaning"})
+            o = str(o).replace('<span class="meaning-meaning">',"").replace("<span>","").replace("</span>","").replace("[","").replace("]","").replace("\n","")
+            if "<span" in o:
+                o = o.split("<span")[0]
+            if "\n" in o:
+                o = o.split("\n")[0]
+            if o and r:
+                jisho.append({"en":o,"jp":r})
+        return jisho
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print("aaaa")
+        print(exc_type, exc_tb.tb_lineno)
+        print(e)
 
 
 def get_wordref(word,inputoutput):
