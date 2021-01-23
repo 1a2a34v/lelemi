@@ -5,6 +5,7 @@ import json
 #import ast
 import sys
 import os
+from korean_romanizer.romanizer import Romanizer
 
 def gather(dictionary,word):
     if dictionary=="wadoku":
@@ -19,6 +20,58 @@ def gather(dictionary,word):
         return get_jisho(word)
     if "gpic" in dictionary:
         return get_gpic(word)
+    if "krdict" in dictionary:
+        return get_krdict(word)
+
+
+def get_krdict(word):
+    print("KEKEKEKEKE")
+        # url="https://tatoeba.org/eng/sentences/search?query={}&from=deu&to=jpn".format(word)
+    url="https://krdict.korean.go.kr/m/eng/searchResult?nationCode=6&nation=eng&divSearch=search&pageNo=1&displayNum=10&preKeyword={}&sort=&proverb=&examples=&mainSearchWord={}".format(word,word)
+    vstr=requests.get(url).content
+    soup = BeautifulSoup(vstr,features="html.parser",from_encoding='utf8')
+    ress = soup.findAll('div', {"class":"result both"})
+    krdict = []
+    for res in ress:
+        rows = soup.find_all(lambda tag: tag.name == 'dl' and not tag.attrs)
+
+        # rows = res.findAll('dd', {"class":"mobile_transFont6"})
+        entries = {}
+        for i in rows:
+            word = i.findAll('a', {"style":"color:#0054FF;text-decoration:underline;"})[0].text
+            translationrows = res.findAll('dd', {"class":"mobile_transFont6"})
+            translations = []
+            for a in translationrows:
+                try:
+                    translation = a.findAll('font', {"class":"manyLang6"})[0].text
+                    koreanex = a.findAll('p', {"style":"border: solid 0px; font-weight: normal;margin-left:16px;margin-top:8px;line-height:25px;"})[0].text.replace("  ","").replace("\n","").replace("\r","").replace("\t","")
+                    engex = a.findAll('p', {"style":"border: solid 0px; font-weight: normal;margin-left:16px;"})[0].text.replace("  ","").replace("\n","").replace("\r","").replace("\t","")
+                    try:
+                        romanization = Romanizer(koreanex).romanize()
+                    except:
+                        romanization = "Romaerror"
+                except:
+                    translation = "No translation"
+                translation = {
+                    "translation":translation,
+                    "koreanex":koreanex,
+                    "engex":engex,
+                    "romanization":romanization
+                }
+                translations.append(translation)
+            if word in entries.keys():
+                num = 2
+                found_place = False
+                while not found_place:
+                    if not word + str(num) in entries.keys():
+                        entries[word+str(num)]=translations
+                        found_place=True
+                    num+=1
+            else:
+                entries[word]=translations
+
+        krdict.append(entries)
+    return krdict
 
 def get_jisho(word):
     try:

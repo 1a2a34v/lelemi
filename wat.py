@@ -1,4 +1,10 @@
 aa = """차가우니까"""
+#frontside contexts with respective songnames
+#make all selectable, allow html modification for desired examples and translations
+#allow for selfcreated drawings as mnemonic
+#also create big list of images (low space?) and let user select
+#order all preselected info nicely at the top part of the backside from then on
+
 
 o="""걷고 싶어 아무 상관없이 시선"""
 p = """

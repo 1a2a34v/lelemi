@@ -69,5 +69,4 @@ class DeckGenerator():
                     fields=[card["front"], card["back"]])
                 ankideck.add_note(my_note)
         my_package = genanki.Package(ankideck)
-        # my_package.media_files = ['format.jpg']
         my_package.write_to_file(os.path.join(os.path.dirname(__file__),'ankidecks/'+self.name+'_ankideck.apkg'))
