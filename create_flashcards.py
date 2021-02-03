@@ -61,8 +61,6 @@ class DeckGenerator():
         sorted_wordlist = sorted(self.words.values(), key=itemgetter("count"))
         for word,values in self.words.items():
             card = generate_flashcard.generate_flashcard(word,values)
-            print("OUOUOUOU")
-            print(card)
             if card:
                 my_note = genanki.Note(
                     model=my_model,

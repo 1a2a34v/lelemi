@@ -1,6 +1,8 @@
 import re
 
 def generate_flashcard(word, values):
+    print(values["tatoeba"])
+
     if values.get("wadoku",None):
         frontside = "<b>{}</b>, 回数: {}".format(word,values["count"])
     else:
@@ -17,6 +19,7 @@ def generate_flashcard(word, values):
     #     reverseside+='<p><a href="{}"><img src="{}.png" width="350" height="450"></a></p>'.format(loc,word)
 
     if values.get("jisho",None):
+        print("goingjisho", word, values)
         if reverseside == "":
             reverseside+='<h3 style="background-color:DodgerBlue;">単語翻訳:</h3>\n'
         i=0
@@ -71,5 +74,5 @@ def generate_flashcard(word, values):
         for tt in values["tatoeba"]:
             reverseside+="{}<br><br>{}<hr/>".format(tt["de"],tt["np"])
             i+=1
-            
+
     return {"front":frontside, "back":reverseside}
